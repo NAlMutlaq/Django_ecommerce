@@ -1,0 +1,62 @@
+{% extends 'base.html'%}
+
+
+{% block content %}
+
+<div class=container>
+    <nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="?page=./">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page"><a href="?page=listing">Listings</a></li>
+  </ol>
+</nav>
+
+{% if listings %}
+    {% for listing in listings %}
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        <div class="col">
+          <div class="card ">
+            <img src="{{ listing.photo.url }}" class="card-img-top" alt="..." width="500" height="600">
+            <div class="card-body">
+              <h5 class="card-title">{{ listing.title }}</h5>
+              <p class="card-text">{{ listing.description }}</p>
+              <span class="card-text"> <strong> Seller: </strong> {{ listing.seller }} </span>
+                <p class="card-text"> <strong> Price: </strong> {{ listing.price }} $ </p>
+              <button type="button" class="btn btn-secondary btn-lg" disabled> View Seller Profile </button>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    {% endfor %}
+    {% else %}
+    <div class="col-md-12"><p>No Listings Available</p></div>
+{% endif %}
+    <nav aria-label="...">
+        {% if listings.has_other_pages %}
+          <ul class="pagination">
+              {% if listings.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{listings.previous_page_number}}">Previous</a>
+            </li>
+              {% else %}
+            <li class="page-item disabled">
+                <a class="page-link"> Previous </a>
+            </li>
+              {% endif %}
+              {% for i in listings.paginator.page_range %}
+              {% if listings.number == i %}
+                    <li class="page-item active">
+                      <a class="page-link" >{{i}}</a>
+                    </li>
+              {% else %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{i}}">{{i}}</a>
+            </li>
+              {% endif %}
+              {% endfor %}
+          </ul>
+   {% endif %}
+</nav>
+</div>
+{% endblock%}
